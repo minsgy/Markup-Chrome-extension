@@ -1,0 +1,16 @@
+{
+  "name": "Markup(CSS Score) 검사 판별기",
+  "short_name": "Markup 검사기",
+  "manifest_version": 2,
+  "version": "0.0.1",
+  "browser_action":{
+    "default_popup": "index.html",
+    "default_title": "Markup 검사기",
+    "default_icon": "logo192.png"
+  },
+  "permissions": [],
+  "web_accessible_resources":[
+    "index.html",
+    "/static/*"
+  ]
+}
