@@ -10,7 +10,9 @@ const Container = styled.div`
   flex-direction: column;
   width: 550px;
   height: 550px;
-  background-color: grey;
+
+  border: 1px solid #e4e4e4;
+  border-radius: 20px;
 `;
 
 
