@@ -37,7 +37,7 @@ const Markup_Label = styled.label`
 const CheckButton = styled.button`
 `;
 
-const InputData = () => {
+const InputData = (props) => {
 
     const HTMLRef = useRef(null);
     const CSSRef = useRef(null);
@@ -45,28 +45,47 @@ const InputData = () => {
     const [HTMLText, SetHTMLText] = useState("");
     const [CSSText, SetCSSText] = useState("");
 
-    // HTMLFILE 읽기
-    const handleChangeFile = (e) => {
+    // HTML FILE 읽기
+    const handleChangeHTMLFile = (e) => {
         let reader = new FileReader();
 
         if (e.target.files[0]){
             reader.readAsText(e.target.files[0], "UTF-8");
             reader.onload = () => {
-                console.log(reader.result);
+                SetHTMLText(reader.result);
+            }
+        }
+    }
+
+    // CSS FILE 읽기
+    const handleChangeCSSFile = (e) => {
+        let reader = new FileReader();
+        if (e.target.files[0]){
+            reader.readAsText(e.target.files[0], "UTF-8");
+            reader.onload = () => {
+                SetCSSText(reader.result);
             }
         }
     }
     
+    const handleSubmitFile = (e) => {
+        e.preventDefault();
+        if(HTMLText !== "" || CSSText !== ""){
+            alert("파일이 입력되지 않았습니다.");
+            return;
+        }
+        props.GetText(HTMLText, CSSText);
+    }
 
     return (
             <>
                 <FileContainer>
                     <Markup_Label htmlFor="HTML_file">HTML 업로드</Markup_Label>
                     <Markup_Label htmlFor="CSS_file">CSS 업로드</Markup_Label>
-                    <Markup_File ref={HTMLRef} onChange={handleChangeFile} type="file" accept="text/html" id="HTML_file" />
-                    <Markup_File ref={CSSRef} onChange={handleChangeFile} type="file" accept="text/css"  id="CSS_file" />
+                    <Markup_File ref={HTMLRef} onChange={handleChangeHTMLFile} type="file" accept="text/html" id="HTML_file" />
+                    <Markup_File ref={CSSRef} onChange={handleChangeCSSFile} type="file" accept="text/css"  id="CSS_file" />
                 </FileContainer>
-                <CheckButton type="submit">체크하기</CheckButton>
+                <CheckButton type="submit" onClick={handleSubmitFile}>체크하기</CheckButton>
            </>
     );
 }

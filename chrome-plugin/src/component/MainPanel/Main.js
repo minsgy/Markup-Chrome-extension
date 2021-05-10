@@ -1,7 +1,8 @@
-import React from 'react';
+import React,{useState} from 'react';
 import styled from 'styled-components';
 
 import InputData from './MarkupPanel/InputData';
+import PrintData from './MarkupPanel/PrintData';
 
 const InputContainer = styled.div`
     display: flex;
@@ -12,9 +13,21 @@ const InputContainer = styled.div`
 
 
 const Main = () => {
+
+    const [HTMLText, SetHTMLText] = useState("");
+    const [CSSText, SetCSSText] = useState("");
+    
+    const GetText = (HTML, CSS) => {
+        SetHTMLText(HTML);
+        SetCSSText(CSS);
+    }
+
+
+
     return (
         <InputContainer>
-            <InputData />
+            <InputData GetText={GetText}/>
+            <PrintData />
         </InputContainer>
     );
 }
