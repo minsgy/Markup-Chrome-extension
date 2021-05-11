@@ -63,6 +63,8 @@ const InputData = (props) => {
         if (e.target.files[0]){
             reader.readAsText(e.target.files[0], "UTF-8");
             reader.onload = () => {
+                // 파일 명 뽑기
+                console.log(e.target.files[0].name);
                 SetCSSText(reader.result);
             }
         }
@@ -70,7 +72,8 @@ const InputData = (props) => {
     
     const handleSubmitFile = (e) => {
         e.preventDefault();
-        if(HTMLText !== "" || CSSText !== ""){
+        console.log(HTMLText, CSSText);
+        if(HTMLText === "" || CSSText === ""){
             alert("파일이 입력되지 않았습니다.");
             return;
         }
