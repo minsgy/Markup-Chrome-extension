@@ -10,7 +10,7 @@ const Container = styled.div`
   height: 100%;
 
   border: 1px solid #e4e4e4;
-  border-radius: 20px;
+
 `;
 
 
