@@ -16,8 +16,8 @@ const PrintDescriptionContainer = styled.div`
     justify-content: space-around;
 `;
 
-const PrintDescription = styled.div`
-    
+const PrintDescription = styled.p`
+    font-size: 10px;
 `;
 
 const PrintTextContainer = styled.div`  
@@ -65,13 +65,12 @@ const ReturnBtn = styled.button`
 const PrintData = ({HTMLText, CSSText}) => {
 
     const [SelectorArray, SetSelectorArray] = useState([]);
-    const [SelectorScore, SetSelectorScore] = useState({
-        
-    })
+    const [SelectorScore, SetSelectorScore] = useState([]);
 
     // 선택자 Filter
     const handleSelector = () => {
         let TempArray = []
+        let ScoreArray = []
         // 문자열 중, } 값 전부 {로 변경 - split 사용하려고
         // 줄바꿈 제거
         // 공백 제거
@@ -85,12 +84,17 @@ const PrintData = ({HTMLText, CSSText}) => {
             }
         }
         SetSelectorArray(TempArray);
-        console.log(SelectorArray);
-
+        console.log(SelectorArray)
         SelectorArray.map(async item => {
             let result = await calculate(item)
-            console.log(result[0].specificityArray);
+            ScoreArray.push(result[0].specificityArray);
+            // console.log(result[0].specificityArray);
         })
+        ScoreArray.sort((a, b)=>{return a[0][1] - b[0][1]});
+        SetSelectorScore(ScoreArray);
+        
+        console.log(SelectorScore);
+        // console.log(ScoreArray);
     }
 
 
