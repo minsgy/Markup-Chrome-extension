@@ -1,7 +1,5 @@
 import React from 'react';
 import styled, {createGlobalStyle} from 'styled-components';
-
-import Footer from './component/FooterPanel/Footer';
 import Header from './component/HeaderPanel/Header';
 import Main from './component/MainPanel/Main';
 
@@ -9,7 +7,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   width: 550px;
-  height: 550px;
+  height: 100%;
 
   border: 1px solid #e4e4e4;
   border-radius: 20px;
@@ -60,17 +58,22 @@ table {
 border-collapse: collapse;
 border-spacing: 0;
 }
+
+html{
+  color: #4B5364;
+}
 `;
 
 
 const App = () => {
-  return (
+  return (  
+    <>
     <Container>
       <GlobalStyle />
       <Header />
       <Main />
-      <Footer />
     </Container>
+    </>
   );
 }
 

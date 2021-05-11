@@ -1,4 +1,4 @@
-import React,{useState,useEffect} from 'react';
+import React,{useState} from 'react';
 import styled from 'styled-components';
 
 import InputData from './MarkupPanel/InputData';
@@ -17,6 +17,7 @@ const Main = () => {
     const [HTMLText, SetHTMLText] = useState("");
     const [CSSText, SetCSSText] = useState("");
     const [isLoading, SetisLoading] = useState(false);
+
     const GetText = (HTML, CSS) => {
         SetHTMLText(HTML);
         SetCSSText(CSS);
@@ -24,9 +25,11 @@ const Main = () => {
     }
 
     return (
+        <>
         <InputContainer>
             { isLoading ? <PrintData HTMLText={HTMLText} CSSText={CSSText} /> : <InputData GetText={GetText}/>}
         </InputContainer>
+        </>
     );
 }
 
