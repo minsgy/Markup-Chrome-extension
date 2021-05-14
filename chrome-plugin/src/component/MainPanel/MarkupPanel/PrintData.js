@@ -225,7 +225,7 @@ const PrintData = ({HTMLText, CSSText}) => {
         <PrintContainer>
             <PrintDescriptionContainer>
                 <PrintDescription>
-                <h4>CSS CASECADE 적용 순서</h4>
+                <h4>CSS CASCADE 적용 순서</h4>
                     <CasecadingContainer>
                         <CASECADING_LIST>
                             <h4>ID Selector Rank</h4>
