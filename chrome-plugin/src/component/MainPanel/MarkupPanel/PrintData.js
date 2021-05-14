@@ -54,23 +54,39 @@ const CASECADING_LIST = styled.ul`
 const Unused_List = styled.ul`
     margin-top: 10px;
     text-align: left;
+    strong{
+        font-size: 12px;
+        color: red;
+    }
     li{
         margin-bottom: 5px;
-        strong{
-            display: inline-block;
-            margin-right: 5px;
-            font-size: 12px;
-            color: #1b56cf;
-        }
+        text-align:center;
     }
 `;
-
-
 
 const PrintTextContainer = styled.div`  
     width: 100%;
     display: flex;
     justify-content: center;
+    margin-top: 10px;
+    border-top: 1px solid #e4e4e4;
+`;
+
+const PrintTextHeader = styled.div`
+    flex: 1;
+    flex-basis: 50%;
+    display: flex;
+    flex-direction: column;
+    overflow: scroll;
+    :nth-child(1){
+        border-right: 1px solid #e4e4e4;
+    }
+    h4{
+        font-size: 13px;
+        text-align: center;
+        color:#1b56cf;
+        padding: 5px 0;
+    }
 `;
 
 
@@ -82,9 +98,6 @@ const PrintTextForm = styled.pre`
     padding : 10px;
     border-top: 1px solid #e4e4e4;
     border-bottom: 1px solid #e4e4e4;
-    :nth-child(1){
-        border-right: 1px solid #e4e4e4;
-    }
 `;
 
 const ReturnBtnContainer = styled.div`
@@ -118,6 +131,7 @@ const PrintData = ({HTMLText, CSSText}) => {
     const [IDSelector, SetIDSelector] = useState([]);
     const [ClassSelector, SetClassSelector] = useState([]);
     const [DefaultSelector, SetDefaultSelector] = useState([]);
+    const [UnusedSelector, SetUnusedSelector] = useState([]);
 
   
     const [HTML, SetHTML] = useState("");
@@ -130,7 +144,8 @@ const PrintData = ({HTMLText, CSSText}) => {
         let ID = [];
         let Class = [];
         let Default = [];
-
+        let Unused = []
+;
         // HTML Filter
         let RemarkSplit_HTML = HTMLText.replace(/<!--[^>](.*?)-->/g,"");
         SetHTML(RemarkSplit_HTML);
@@ -182,7 +197,10 @@ const PrintData = ({HTMLText, CSSText}) => {
         SetDefaultSelector(Default);
         console.log(DefaultSelector);
 
+        Unused.push('.content');
+        SetUnusedSelector(Unused);
 
+        // 스코어점수 계산
         SelectorArray.map(item => {
             let result = calculate(item)
             ScoreArray.push(result[0].specificityArray);
@@ -193,11 +211,15 @@ const PrintData = ({HTMLText, CSSText}) => {
     const renderIDlist = () => IDSelector.length > 0 && IDSelector.map((item,key) => <li key={key}>{item}</li>);
     const renderClasslist = () => ClassSelector.length > 0 && ClassSelector.map((item,key) => <li key={key}>{item}</li>);
     const renderDefaultlist = () => DefaultSelector.length > 0 && DefaultSelector.map((item,key) => <li key={key}>{item}</li>);
+    const renderUnusedlist = () => UnusedSelector.length > 0 && UnusedSelector.map((item, key) => <li key={key}><strong>{item}</strong> 선택자를 사용되지 않고 있습니다. </li>);
     useEffect(()=>{
+        // CASECADE LIST RENDER
         renderIDlist();
         renderClasslist();
         renderDefaultlist();
+        renderUnusedlist();
     }, [IDSelector,ClassSelector,DefaultSelector])
+    
     return (
         <>
         <PrintContainer>
@@ -222,17 +244,19 @@ const PrintData = ({HTMLText, CSSText}) => {
                 <PrintDescription>
                     <h4>적용되지 않은 Selector</h4>
                     <Unused_List>
-                        <li><strong></strong></li>
-                        <li><strong></strong></li>
-                        <li><strong></strong></li>
-                        <li><strong></strong></li>
-                        <li><strong></strong></li>
+                        {renderUnusedlist()}
                     </Unused_List>
                 </PrintDescription>
             </PrintDescriptionContainer>
             <PrintTextContainer>
-                <PrintTextForm>{HTML}</PrintTextForm>
-                <PrintTextForm>{CSS}</PrintTextForm>
+                <PrintTextHeader>
+                    <h4>Filter HTML</h4>
+                    <PrintTextForm>{HTML}</PrintTextForm>
+                </PrintTextHeader>
+                <PrintTextHeader>
+                    <h4>Filter CSS</h4>
+                    <PrintTextForm>{CSS}</PrintTextForm>
+                </PrintTextHeader>
             </PrintTextContainer>
         </PrintContainer>
         <ReturnBtnContainer>
