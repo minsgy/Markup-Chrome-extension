@@ -206,6 +206,7 @@ const PrintData = ({HTMLText, CSSText}) => {
             ScoreArray.push(result[0].specificityArray);
         })
         SetSelectorScore(ScoreArray);
+        console.log(SelectorScore)
     }
 
     const renderIDlist = () => IDSelector.length > 0 && IDSelector.map((item,key) => <li key={key}>{item}</li>);
