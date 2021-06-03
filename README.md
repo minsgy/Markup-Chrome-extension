@@ -22,3 +22,4 @@
 - [ ] CSS 선택자 적용 우선 순위 정렬 기능 제공
 - [ ] OnClick CSS 선택자 Clear 기능 제공
 - [ ] CSS 선택자 리스트 UI 재설계 및 개선
+- [ ] Google Develop 등록 후, Store 신청
