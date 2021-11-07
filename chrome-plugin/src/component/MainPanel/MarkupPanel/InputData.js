@@ -2,7 +2,6 @@ import React, {useRef, useState} from 'react';
 import styled from 'styled-components';
 import {ReactComponent as HTMLMark} from '../../assets/Images/logos_html-5.svg';
 import {ReactComponent as CSSMark} from '../../assets/Images/logos_css-3.svg';
-
 const FileContainer = styled.div`
     display: flex;
     width: 450px;
@@ -54,6 +53,7 @@ const MarkupTitleLine = styled.div`
     height: 20%;
     h3{
         font-size: 18px;
+        font-weight: bold;
     }
 `;
 
@@ -63,12 +63,14 @@ const MarkupContentLine = styled.div`
     justify-content: space-between;
     align-items: center;
     p{
-        font-size: 10px;
-        strong{
+        margin-left: 5px;
+        font-size: 11px;
+        line-height: 15px;
+    }  
+    strong{
             font-size: 15px;
             margin-bottom: 10px;
             display: block;
-        }
     }
 `;
 
@@ -77,15 +79,15 @@ const MarkupLabel = styled.label`
    flex-direction: column;
    justify-content: center;
    align-items: center;
-   font-size: 13px;
-   border: 1px solid #e4e4e4;
-   border-radius: 5px;
+   font-size: 11px;
+   background-color: #ccc;
+   font-weight: bold;
    cursor: pointer;
    width: 50px;
-   height: 30px;
+   height: 24px;
    :hover{
-        transition: 0.5s;
-        background-color: skyblue;
+        transition: 0.2s;
+        background-color: #aaa;
    }
    span{
        font-size: 18px;
@@ -101,20 +103,20 @@ const CheckBtnContainer = styled.div`
 `;
 
 const CheckButton = styled.button`
-    border: 1px solid #1b56cf;
-    background-color: #1b56cf;
-    color: white;
+    color: #333;
+    border: 1px solid #999;
+    background-color: #fff;
     border-radius: 30px;
     width: 100px;
     font-size: 13px;
     height: 30px;
    :hover{
        transition: 0.3s;
-       background-color: white;
-       color: black;
+       border-color: transparent;
+       background-color: #0C3B45;
+       color: white;
    }
 `;
-
 
 
 const InputData = (props) => {
@@ -170,13 +172,12 @@ const InputData = (props) => {
                         <MarkupTitleLine>
                             <h3>HTML</h3>
                             <MarkupLabel htmlFor="HTML_file">
-                                + FILE
+                                + 파일
                             </MarkupLabel>
                         </MarkupTitleLine>
                         <MarkupContentLine>
                             <HTMLMark width={40}/>
                             <p>
-                                <strong>Add HTML</strong>
                                 { HTMLText ==="" ? <>검사 할 HTML을 선택해주세요.</> : <>{HTMLFileName}을 선택했습니다.</> }
                             </p>
                         </MarkupContentLine>
@@ -186,13 +187,12 @@ const InputData = (props) => {
                         <MarkupTitleLine>
                             <h3>CSS</h3>
                             <MarkupLabel htmlFor="CSS_file">
-                                + FILE
+                                + 파일
                             </MarkupLabel>
                         </MarkupTitleLine>
                         <MarkupContentLine>
                             <CSSMark width={40}/>
                             <p>
-                                <strong>Add CSS</strong>
                                 { CSSText ==="" ? <>검사 할 CSS를 선택해주세요.</> : <>{CSSFileName}을 선택했습니다.</> }
                             </p>
                         </MarkupContentLine>

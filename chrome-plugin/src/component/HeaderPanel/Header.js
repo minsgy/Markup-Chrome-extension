@@ -7,17 +7,15 @@ const HeaderContainer = styled.div`
     align-items: center;
     width: 100%;
     height: 50px;
-    background-color: white;
-    border-bottom: 1px solid #e4e4e4;
+    background-color: #0C3B45;
 `;
 
 const TitleText = styled.p`
     font-size: 10px;
-    color: grey;
+    color: #fff;
     strong{
         display: block;
         font-size: 18px;
-        color: #4B5364;
     }
 `;
 

@@ -3,13 +3,14 @@ import styled from 'styled-components';
 
 import InputData from './MarkupPanel/InputData';
 import PrintData from './MarkupPanel/PrintData';
-
 const InputContainer = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    background-color: #f1f1f1;
 `;
+
 
 
 const Main = () => {
