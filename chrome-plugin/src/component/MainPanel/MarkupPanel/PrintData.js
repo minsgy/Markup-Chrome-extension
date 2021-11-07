@@ -1,6 +1,18 @@
 import React, {useEffect, useState} from 'react';
 import {calculate, compare} from 'specificity';
+
 import styled from 'styled-components';
+
+const SelectItem = styled.li`
+
+    border: ${({color}) => color ? `1px solid ${color}`: 'none'};
+    padding: 2px 5px;
+    border-radius: 5px;
+    box-sizing: border-box;
+    color: black;   
+    margin-bottom: 5px;
+    
+`;
 
 
 const PrintContainer = styled.div`
@@ -33,9 +45,10 @@ const CasecadingContainer = styled.div`
 `;
 
 const CASECADING_LIST = styled.ul`
-    margin-top: 10px;
-    margin-right: 5px;
-    flex:1;
+    /* margin-top: 10px;
+    margin-right: 5px; */
+    margin: 10px 5px;
+    /* flex:1; */
     flex-basis: 33%;
     text-align: center;
     h4{
@@ -46,12 +59,9 @@ const CASECADING_LIST = styled.ul`
         display:inline-block;
         border-bottom: 1px solid #e4e4e4;
     }
-    li{
-        margin-bottom: 5px;
-    }
 `;
 
-const Unused_List = styled.ul`
+const UnusedList = styled.ul`
     margin-top: 10px;
     text-align: left;
     strong{
@@ -98,6 +108,18 @@ const PrintTextForm = styled.pre`
     padding : 10px;
     border-top: 1px solid #e4e4e4;
     border-bottom: 1px solid #e4e4e4;
+
+    &::-webkit-scrollbar{
+        width: 6px;
+    }
+    &::-webkit-scrollbar-thumb {
+        height: 10%;
+        background-color: rgba(33, 133, 133, 1);
+        border-radius: 10px;
+    }   
+    &::-webkit-scrollbar-track {
+        background-color: rgba(33,133, 33, 0.2);
+    }
 `;
 
 const ReturnBtnContainer = styled.div`
@@ -106,6 +128,21 @@ const ReturnBtnContainer = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
+`;
+
+const RemoveBtn = styled.button`
+    border: 1px solid #1b56cf;
+    background-color: #1b56cf;
+    color: white;
+    border-radius: 10px;
+    width: 50px;
+    font-size: 13px;
+    height: 30px;
+   :hover{
+       transition: 0.3s;
+       background-color: white;
+       color: black;
+   }
 `;
 
 const ReturnBtn = styled.button`
@@ -133,9 +170,25 @@ const PrintData = ({HTMLText, CSSText}) => {
     const [DefaultSelector, SetDefaultSelector] = useState([]);
     const [UnusedSelector, SetUnusedSelector] = useState([]);
 
-  
-    const [HTML, SetHTML] = useState("");
-    const [CSS, SetCSS] = useState("");
+    const [HTML, SetHTML] = useState(HTMLText);
+    const [CSS, SetCSS] = useState(CSSText);
+    const [ResultCSS, SetResultCSS] = useState('없음');
+
+
+    const handleRemoveSelector = (id) => {
+        let arr = [...UnusedSelector];
+        let css = ResultCSS;
+        let query = arr[id];
+        css = css.split(query);
+        css[1] = css[1].replace('}',']');
+        css = css[0].concat(css[1].split(']')[1].replace(/\s+/, ''));
+
+        console.log(css)
+        SetResultCSS(css);
+        arr.splice(id, 1);
+        SetUnusedSelector(arr);
+    }
+
 
     // 선택자 Filter
     const handleSelector = () => {
@@ -144,19 +197,49 @@ const PrintData = ({HTMLText, CSSText}) => {
         let ID = [];
         let Class = [];
         let Default = [];
-        let Unused = []
-;
+        let Unused = [];
         // HTML Filter
-        let RemarkSplit_HTML = HTMLText.replace(/<!--[^>](.*?)-->/g,"");
-        SetHTML(RemarkSplit_HTML);
 
+        SetResultCSS(CSSText);
+        let RemarkSplit_HTML = HTMLText.replace(/<!--[^>](.*?)-->/g,"");
+        // RemarkSplit_HTML = RemarkSplit_HTML.replace(/\n/gi,"");
+        // RemarkSplit_HTML = RemarkSplit_HTML.replace(/\s+/gi,"");
+        let FilterClasses = RemarkSplit_HTML.match(/class=".*"/gi);
+
+        FilterClasses = FilterClasses.map(value => {
+            value = value.replace('class=', '');
+            value = value.replace(/"/gi, '');
+            return `.${value}`
+        })
+
+
+        let FilterId = RemarkSplit_HTML.match(/id=".*"/gi);
+        if (FilterId !== undefined) {
+            FilterId = FilterId.filter(value => !value.includes(' '));
+            FilterId = FilterId.map(value => {
+                value = value.replace('id=', '');
+                value = value.replace(/"/gi, '');
+                return `#${value}`
+            })
+        }
+
+        RemarkSplit_HTML =  FilterClasses.concat([...FilterId]);
+        const set = new Set(RemarkSplit_HTML);
+        RemarkSplit_HTML = [...set];
+
+        
+        SetHTML(RemarkSplit_HTML);
+ 
         // CSS Filter
-        // CSS 주석제거 완료
+        // CSS 주석제 완료
         // 문자열 중, } 값 전부 {로 변경 - split 사용하려고
         // 줄바꿈 제거
         // 공백 제거
         let RemarkSplit_CSS = CSSText.replace(/(\/\*)[^(\*\/)]*(\*\/)/g, "");
+
+        console.log(RemarkSplit_CSS)
         SetCSS(RemarkSplit_CSS); // 주석제거 CSS
+        console.log(RemarkSplit_HTML)
         let SplitText = RemarkSplit_CSS.replace(/}/gi, "{");
         let temp1 = SplitText.replace(/\n/gi, "");
         let TextSplit = temp1.split('{');
@@ -169,7 +252,7 @@ const PrintData = ({HTMLText, CSSText}) => {
         // 내림차순으로 정렬
         TempArray = TempArray.sort(compare).reverse();
         SetSelectorArray(TempArray);
-
+        console.log(TempArray)
         // 아이디 선택자 저장
         SelectorArray.map(item => {
             if(item.includes('#')){
@@ -197,7 +280,18 @@ const PrintData = ({HTMLText, CSSText}) => {
         SetDefaultSelector(Default);
         console.log(DefaultSelector);
 
-        Unused.push('.content');
+        
+        ID.map(value => {
+            if (!HTML.includes(value))
+                Unused.push(value)
+        })
+
+        Class.map(value => {
+            if (!HTML.includes(value))
+                Unused.push(value)
+        })
+
+
         SetUnusedSelector(Unused);
 
         // 스코어점수 계산
@@ -209,24 +303,25 @@ const PrintData = ({HTMLText, CSSText}) => {
         console.log(SelectorScore)
     }
 
-    const renderIDlist = () => IDSelector.length > 0 && IDSelector.map((item,key) => <li key={key}>{item}</li>);
-    const renderClasslist = () => ClassSelector.length > 0 && ClassSelector.map((item,key) => <li key={key}>{item}</li>);
-    const renderDefaultlist = () => DefaultSelector.length > 0 && DefaultSelector.map((item,key) => <li key={key}>{item}</li>);
-    const renderUnusedlist = () => UnusedSelector.length > 0 && UnusedSelector.map((item, key) => <li key={key}><strong>{item}</strong> 선택자를 사용되지 않고 있습니다. </li>);
+    const renderIDlist = () => IDSelector.length > 0 && IDSelector.map((item,key) => <SelectItem color={'red'} key={key} >{item}</SelectItem>);
+    const renderClasslist = () => ClassSelector.length > 0 && ClassSelector.map((item,key) => <SelectItem color={'red'} key={key} >{item}</SelectItem>);
+    const renderDefaultlist = () => DefaultSelector.length > 0 && DefaultSelector.map((item,key) => <SelectItem color={'red'} key={key} >{item}</SelectItem>);
+    const renderUnusedlist = () => UnusedSelector.length > 0 && UnusedSelector.map((item, key) => <SelectItem onClick={() => handleRemoveSelector(key)} key={key}><strong>{item}</strong> <RemoveBtn className="remove-button">삭제</RemoveBtn> </SelectItem>);
     useEffect(()=>{
         // CASECADE LIST RENDER
         renderIDlist();
         renderClasslist();
         renderDefaultlist();
         renderUnusedlist();
-    }, [IDSelector,ClassSelector,DefaultSelector])
-    
+    }, [IDSelector,ClassSelector,DefaultSelector, UnusedSelector])
+
+
     return (
         <>
         <PrintContainer>
             <PrintDescriptionContainer>
                 <PrintDescription>
-                <h4>CSS CASCADE 적용 순서</h4>
+                <h4>CSS 적용 순서</h4>
                     <CasecadingContainer>
                         <CASECADING_LIST>
                             <h4>ID Selector Rank</h4>
@@ -244,19 +339,19 @@ const PrintData = ({HTMLText, CSSText}) => {
                 </PrintDescription>
                 <PrintDescription>
                     <h4>적용되지 않은 Selector</h4>
-                    <Unused_List>
+                    <UnusedList>
                         {renderUnusedlist()}
-                    </Unused_List>
+                    </UnusedList>
                 </PrintDescription>
             </PrintDescriptionContainer>
             <PrintTextContainer>
                 <PrintTextHeader>
-                    <h4>Filter HTML</h4>
-                    <PrintTextForm>{HTML}</PrintTextForm>
+                    <h4>CSS</h4>
+                    <PrintTextForm>{CSS}</PrintTextForm>
                 </PrintTextHeader>
                 <PrintTextHeader>
-                    <h4>Filter CSS</h4>
-                    <PrintTextForm>{CSS}</PrintTextForm>
+                    <h4>Result CSS</h4>
+                    <PrintTextForm>{ResultCSS}</PrintTextForm>
                 </PrintTextHeader>
             </PrintTextContainer>
         </PrintContainer>

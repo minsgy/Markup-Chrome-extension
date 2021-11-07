@@ -11,7 +11,7 @@ const FileContainer = styled.div`
     align-items: center;
 `;
 
-const Markup_File = styled.input`
+const MarkupFile = styled.input`
     /* blind */
     position: absolute;
     width: 1px;
@@ -72,7 +72,7 @@ const MarkupContentLine = styled.div`
     }
 `;
 
-const Markup_Label = styled.label`  
+const MarkupLabel = styled.label`  
    display: flex;
    flex-direction: column;
    justify-content: center;
@@ -169,9 +169,9 @@ const InputData = (props) => {
                     <MarkupBox>
                         <MarkupTitleLine>
                             <h3>HTML</h3>
-                            <Markup_Label htmlFor="HTML_file">
+                            <MarkupLabel htmlFor="HTML_file">
                                 + FILE
-                            </Markup_Label>
+                            </MarkupLabel>
                         </MarkupTitleLine>
                         <MarkupContentLine>
                             <HTMLMark width={40}/>
@@ -185,9 +185,9 @@ const InputData = (props) => {
                     <MarkupBox>
                         <MarkupTitleLine>
                             <h3>CSS</h3>
-                            <Markup_Label htmlFor="CSS_file">
+                            <MarkupLabel htmlFor="CSS_file">
                                 + FILE
-                            </Markup_Label>
+                            </MarkupLabel>
                         </MarkupTitleLine>
                         <MarkupContentLine>
                             <CSSMark width={40}/>
@@ -197,8 +197,8 @@ const InputData = (props) => {
                             </p>
                         </MarkupContentLine>
                     </MarkupBox>
-                    <Markup_File ref={HTMLRef} onChange={handleChangeHTMLFile} type="file" accept="text/html" id="HTML_file" />
-                    <Markup_File ref={CSSRef} onChange={handleChangeCSSFile} type="file" accept="text/css"  id="CSS_file" />
+                    <MarkupFile ref={HTMLRef} onChange={handleChangeHTMLFile} type="file" accept="text/html" id="HTML_file" />
+                    <MarkupFile ref={CSSRef} onChange={handleChangeCSSFile} type="file" accept="text/css"  id="CSS_file" />
                 </FileContainer>
                 <CheckBtnContainer>
                 <CheckButton type="submit" onClick={handleSubmitFile}>체크하기</CheckButton>
