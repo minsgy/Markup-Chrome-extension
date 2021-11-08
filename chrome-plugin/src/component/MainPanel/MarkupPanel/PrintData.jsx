@@ -235,14 +235,37 @@ const StatusContainer = styled.div`
   display: flex;
   gap: 10px;
   justify-content: center;
+  flex-direction: column;
   align-items: center;
 `;
 
-const Status = styled.span`
+const StatusHead = styled.span`
   font-size: 12px;
+  color: #0c3b45;
+  font-weight: bold;
+`;
+const Status = styled.span`
+  font-size: 10px;
+  strong {
+    font-weight: bold;
+    color: green;
+  }
+`;
+
+const CssHeader = styled.h4`
+  line-height: 10px;
+  span {
+    :hover {
+      cursor: pointer;
+      background-color: rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+    }
+  }
 `;
 
 const PrintData = ({ HTMLText, CSSText }) => {
+  const ResultRef = useRef(null);
+
   const [SelectorArray, SetSelectorArray] = useState([]);
   const [SelectorScore, SetSelectorScore] = useState([]);
 
@@ -258,6 +281,11 @@ const PrintData = ({ HTMLText, CSSText }) => {
   const [Source, SetSource] = useState(undefined);
   const [Minified, SetMinified] = useState(undefined);
   const [Efficiency, SetEfficiency] = useState(null);
+
+  const handleCopyText = async () => {
+    await navigator.clipboard.writeText(ResultCSS);
+    alert("복사되었습니다.");
+  };
 
   const handleRemoveSelector = (id) => {
     let arr = [...UnusedSelector];
@@ -281,7 +309,7 @@ const PrintData = ({ HTMLText, CSSText }) => {
     SetSource(output.stats.originalSize);
     SetMinified(output.stats.minifiedSize);
     const calc = Math.round(output.stats.efficiency * 10000) / 100;
-    SetEfficiency(calc + "%");
+    SetEfficiency(calc);
   };
 
   // 선택자 Filter
@@ -515,8 +543,18 @@ const PrintData = ({ HTMLText, CSSText }) => {
             <PrintTextForm>{CSS}</PrintTextForm>
           </PrintTextHeader>
           <PrintTextHeader>
-            <h4>Result CSS</h4>
-            <PrintTextForm>{ResultCSS}</PrintTextForm>
+            <CssHeader>
+              Result CSS{" "}
+              <span
+                onClick={handleCopyText}
+                class="material-icons"
+                style={{ fontSize: "12px" }}
+              >
+                content_paste
+              </span>
+            </CssHeader>
+
+            <PrintTextForm ref={ResultRef}>{ResultCSS}</PrintTextForm>
           </PrintTextHeader>
         </PrintTextContainer>
       </PrintContainer>
@@ -525,11 +563,26 @@ const PrintData = ({ HTMLText, CSSText }) => {
         <ReturnBtn onClick={handlerCSSminify}>Minify</ReturnBtn>
 
         {Source && Minified && Efficiency ? (
-          <StatusContainer>
-            <Status>기존 코드 길이 : {Source} byte </Status>
-            <Status>압축 코드 길이 : {Minified} byte </Status>
-            <Status>향상 된 시간 : {Efficiency} </Status>
-          </StatusContainer>
+          <>
+            <StatusContainer>
+              <StatusHead>기존 코드 길이 </StatusHead>
+              <Status>
+                <strong>{Source}</strong> byte
+              </Status>
+            </StatusContainer>
+            <StatusContainer>
+              <StatusHead>압축 코드 길이 </StatusHead>
+              <Status>
+                <strong style={{ color: "red" }}>{Minified}</strong> byte
+              </Status>
+            </StatusContainer>
+            <StatusContainer>
+              <StatusHead>효율 증가(시간대비)</StatusHead>
+              <Status>
+                <strong>{Efficiency}</strong>%
+              </Status>
+            </StatusContainer>
+          </>
         ) : (
           ""
         )}
