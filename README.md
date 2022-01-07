@@ -32,7 +32,7 @@
 - JavaScript
 - React
 - OpenLibrary
-  - Specifity API
+  - specificity API
 
 ## 🔨 기능
 
